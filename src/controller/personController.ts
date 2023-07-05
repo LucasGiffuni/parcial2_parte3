@@ -3,30 +3,38 @@ import { NextFunction, Request, Response } from "express";
 import { IResponse } from "../interfaces/IResponse";
 import { IPerson } from "../interfaces/IPerson";
 
- const persons: IPerson[] = [
+const persons: IPerson[] = [
   {
     idPersona: 1,
-    nombres: ["juan", "carlos"],
-    apellidos: ["cruz", "cruz"],
+    nombres: "juan",
+    apellidos: "crus",
     email: "nose@gmail.com",
     telefono: 9999999,
     idEmpresa: 0,
   },
   {
     idPersona: 2,
-    nombres: ["pepe"],
-    apellidos: ["sanchez"],
+    nombres: "pepe",
+    apellidos: "sanchez",
     email: "aa@gmail.com",
     telefono: 12432314,
     idEmpresa: 0,
   },
   {
     idPersona: 3,
-    nombres: ["matias"],
-    apellidos: ["perez"],
+    nombres: "matias",
+    apellidos: "perez",
     email: "bb@gmail.com",
     telefono: 646463456,
     idEmpresa: 1,
+  },
+  {
+    idPersona: 4,
+    nombres: "pepe",
+    apellidos: "sanchez",
+    email: "cccc@gmail.com",
+    telefono: 12432314,
+    idEmpresa: 0,
   },
 ];
 
@@ -103,7 +111,6 @@ const eliminarPersona = async (req: Request, res: Response) => {
     response.Result.statustext = "Person deleted correctly";
 
     res.status(200).json(response);
-
   } else {
     const response: IResponse<any> = {
       Result: {
@@ -118,39 +125,41 @@ const eliminarPersona = async (req: Request, res: Response) => {
   }
 };
 const buscarPersona = async (req: Request, res: Response) => {
-  const nombre = req.body.nombre;
-  const apellido = req.body.apellido;
+  const name = req.query.name;
+  const lastName = req.query.lastName;
 
-  if (nombre) {
-    let index = persons.findIndex((d) =>
-      d.nombres.forEach((n) => {
-        n === nombre;
-      })
+  const data = {
+    name,
+    lastName,
+  };
 
-    );
-    console.log(index)
-
-    if (persons[index]) {
-      const response: IResponse<IPerson> = {
-        Result: {
-          statuscode: "200",
-          statustext: "OK",
-        },
-        data: persons[index],
-      };
-      res.status(200);
-      res.json(response);
-    }else{
-        const response: IResponse<any> = {
-            Result: {
-              statuscode: "404",
-              statustext: "NOT FOUND",
-            },
-            data: "",
-          };
-          res.status(404);
-          res.json(response);
+  const response: IResponse<IPerson[]> = {
+    Result: {
+      statuscode: "",
+      statustext: "",
+    },
+    data: [],
+  };
+  try {
+    let returnListPeople: IPerson[] = [];
+    persons.find((value) => {
+      if (value.nombres === data.name && value.apellidos === data.lastName) {
+        returnListPeople.push(value);
+      }
+    });
+    if (returnListPeople.length >= 1) {
+      response.Result.statuscode = "200";
+      response.Result.statustext = "Ok";
+      response.data = returnListPeople;
+      res.status(200).json(response);
+    } else {
+      response.Result.statuscode = "404";
+      response.Result.statustext = "Not found";
+      response.data = returnListPeople;
+      res.status(404).json(response);
     }
+  } catch (err) {
+    res.status(500).json({ error: err?.message });
   }
 };
 
@@ -223,5 +232,5 @@ export default {
   buscarPersona,
   listarPersonas,
   detallePersona,
-  persons
+  persons,
 };
