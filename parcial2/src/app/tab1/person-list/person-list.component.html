@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+	<ion-toolbar>
+	  <ion-title>
+		People
+	  </ion-title>
+	</ion-toolbar>
+  </ion-header>
+
+  <ion-content [fullscreen]="true">
+	<ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+	  <ion-refresher-content></ion-refresher-content>
+	</ion-refresher>
+
+	<ion-header collapse="condense">
+	  <ion-toolbar>
+		<ion-title size="large">
+		  Peope
+		</ion-title>
+	  </ion-toolbar>
+	</ion-header>
+
+	<ion-list *ngIf="peopleList">
+		<app-person *ngFor="let person of this.peopleList" [person]="person"></app-person>
+	</ion-list>
+  </ion-content>
