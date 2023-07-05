@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/user", userRoutes);
-
+app.use("/persona", personRoutes);
 
 app.use((req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -70,7 +70,7 @@ app.use((req, res, next) => {
 });
 
 /** Routes go here */
-app.use("/persona", personRoutes);
+
 app.use("/empresa", empresaRoutes);
 
 
