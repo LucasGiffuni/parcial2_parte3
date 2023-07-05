@@ -1,0 +1,23 @@
+<ion-item
+*ngIf="empresa"
+[routerLink]="'/musicPlayer/' + empresa.idEmpresa"
+[detail]="false"
+>
+
+<div slot="start" [class]="!empresa.nombre ? 'dot dot-unread' : 'dot'"></div>
+<ion-label class="ion-text-wrap">
+  <h2>
+	{{ empresa.nombre }}
+	<span class="date">
+	  <ion-note>Reproducciones: {{ empresa.website }}</ion-note>
+	  <ion-icon
+		aria-hidden="true"
+		name="chevron-forward"
+		size="small"
+		*ngIf="isIos()"
+	  ></ion-icon>
+	</span>
+  </h2>
+  <h3>{{ empresa.notasAdicionales }}</h3>
+</ion-label>
+</ion-item>
